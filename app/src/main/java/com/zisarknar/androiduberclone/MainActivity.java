@@ -9,7 +9,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.zisarknar.androiduberclone.model.User;
 
+import dmax.dialog.SpotsDialog;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -93,10 +93,12 @@ public class MainActivity extends AppCompatActivity {
         dialog.setView(loginLayout);
 
         //set button
-        dialog.setPositiveButton("LOGIN", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("SIGNIN", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
+
+                btnSignIn.setEnabled(false);
 
                 //check validation
                 if (TextUtils.isEmpty(edtEmail.getText())) {
@@ -109,17 +111,23 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
+                final SpotsDialog waitingDialog = new SpotsDialog(MainActivity.this);
+                waitingDialog.show();
+
                 //Login
                 auth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
+                        waitingDialog.dismiss();
                         startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
                         finish();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        waitingDialog.dismiss();
                         Snackbar.make(rootLayout, "Failed " + e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                        btnSignIn.setEnabled(true);
                     }
                 });
             }
