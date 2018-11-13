@@ -1,4 +1,4 @@
-package com.zisarknar.androiduberclone;
+package com.zisarknar.androiduberclone.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.zisarknar.androiduberclone.R;
 import com.zisarknar.androiduberclone.model.User;
 
 import dmax.dialog.SpotsDialog;
